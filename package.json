@@ -1,0 +1,17 @@
+{
+  "name": "assemblyscript-functions",
+  "version": "1.0.0",
+  "repository": "https://github.com/togekk1/popper-svelte.git",
+  "author": "togekk1",
+  "license": "MIT",
+  "scripts": {
+    "publish:prod": "yarn publish --tag latest",
+    "publish:next": "yarn publish --tag next"
+  },
+  "releaseFiles": [
+    "LICENSE",
+    "package.json",
+    "README.md",
+    "tsconfig.json"
+  ]
+}
