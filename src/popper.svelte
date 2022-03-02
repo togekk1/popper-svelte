@@ -19,7 +19,7 @@
   let current_placement: Placement;
 
   export const toggle = (show?: boolean) => {
-    popper_close_store.update((value: boolean) => !value);
+    popper_close_store?.update((value: boolean) => !value);
     popper_show = show ?? !popper_show;
 
     popper_show
