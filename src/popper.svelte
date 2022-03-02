@@ -12,14 +12,12 @@
   export let placement: Placement;
   export let has_arrow: boolean | undefined = undefined;
   export let no_container: boolean | undefined = undefined;
-  export let popper_close_store: Writable<boolean> | undefined = undefined;
 
   let popper: HTMLDivElement;
   let popper_arrow: HTMLElement;
   let current_placement: Placement;
 
   export const toggle = (show?: boolean) => {
-    popper_close_store?.update((value: boolean) => !value);
     popper_show = show ?? !popper_show;
 
     popper_show
