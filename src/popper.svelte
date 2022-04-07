@@ -1,8 +1,7 @@
 <script lang="ts">
   import { createPopper } from "@popperjs/core";
   import type { Placement, ModifierArguments } from "@popperjs/core";
-  import { PAGE_STYLE } from "constants/page-style.constant.svelte";
-  import type { Writable } from "svelte/store";
+  import { PAGE_STYLE } from "./constants/page-style.constant.svelte";
 
   export let reference: HTMLElement;
   export let popper_class: svelte.JSX.ClassName = "";
