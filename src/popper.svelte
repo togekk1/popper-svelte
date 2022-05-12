@@ -11,34 +11,36 @@
   export let placement: Placement;
   export let has_arrow: boolean | undefined = undefined;
   export let no_container: boolean | undefined = undefined;
+  export let current_placement: Placement;
 
   let popper: HTMLDivElement;
   let popper_arrow: HTMLElement;
-  let current_placement: Placement;
 
   export const toggle = (show?: boolean) => {
     popper_show = show ?? !popper_show;
 
-    popper_show
-      ? setTimeout(() => {
-          popper_class_show = 1;
-          createPopper(reference, popper, {
-            placement,
+    if (popper_show) {
+      setTimeout(() => {
+        createPopper(reference, popper, {
+          placement,
 
-            modifiers: [
-              {
-                name: "arrow",
-                options: {
-                  element: popper_arrow,
-                },
-                fn({ state }: ModifierArguments<any>) {
-                  current_placement = state.placement;
-                },
+          modifiers: [
+            {
+              name: "arrow",
+              options: {
+                element: popper_arrow,
               },
-            ],
-          });
-        }, 0)
-      : (popper_class_show = undefined);
+              fn({ state }: ModifierArguments<any>) {
+                current_placement = state.placement;
+              },
+            },
+          ],
+        });
+        setTimeout(() => {
+          popper_class_show = 1;
+        }, 0);
+      }, 0);
+    } else popper_class_show = undefined;
   };
 </script>
 
@@ -48,7 +50,7 @@
     class="{popper_class} {has_arrow
       ? PAGE_STYLE.POPPER_PLACEMENT[current_placement]
       : ''}"
-    class:hidden={!popper_class_show}
+    class:opacity-0={!popper_class_show}
   >
     {#if has_arrow}
       <div
