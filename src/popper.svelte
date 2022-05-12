@@ -11,7 +11,7 @@
   export let placement: Placement;
   export let has_arrow: boolean | undefined = undefined;
   export let no_container: boolean | undefined = undefined;
-  export let current_placement: Placement;
+  export let current_placement: Placement | undefined = undefined;
 
   let popper: HTMLDivElement;
   let popper_arrow: HTMLElement;
