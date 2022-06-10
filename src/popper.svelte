@@ -4,6 +4,7 @@
   import { PAGE_STYLE } from "./constants/page-style.constant.svelte";
 
   export let reference: HTMLElement;
+  export let id: string | undefined = undefined;
   export let popper_class: svelte.JSX.ClassName = "";
   export let container_class: svelte.JSX.ClassName = "";
   export let popper_show: boolean | undefined = undefined;
@@ -46,6 +47,7 @@
 
 {#if popper_show}
   <div
+    {id}
     bind:this={popper}
     class="{popper_class} {has_arrow
       ? PAGE_STYLE.POPPER_PLACEMENT[current_placement]
