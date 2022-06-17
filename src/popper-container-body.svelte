@@ -2,6 +2,7 @@
   import { createPopper } from "@popperjs/core";
   import type { Placement, ModifierArguments } from "@popperjs/core";
   import { PAGE_STYLE } from "./constants/page-style.constant.svelte";
+  import { createEventDispatcher } from "svelte";
 
   export let reference: HTMLElement;
   export let id: string | undefined = undefined;
@@ -16,15 +17,19 @@
 
   let popper: HTMLDivElement;
   let popper_arrow: HTMLElement;
+  let show_local: boolean;
+
+  const dispatch = createEventDispatcher();
 
   export const toggle = (show?: boolean) => {
     popper_show = show ?? !popper_show;
 
     if (popper_show) {
+      document.body.append(popper);
+      show_local = true;
       setTimeout(() => {
         createPopper(reference, popper, {
           placement,
-          strategy: "fixed",
 
           modifiers: [
             {
@@ -41,20 +46,31 @@
         setTimeout(() => {
           popper_class_show = 1;
         }, 0);
-      }, 0);
-    } else popper_class_show = undefined;
+      }, 100);
+    } else {
+      document.body.removeChild(popper);
+      show_local = false;
+      popper_class_show = undefined;
+    }
   };
 </script>
 
-{#if popper_show}
-  <div
-    {id}
-    bind:this={popper}
-    class="{popper_class} {has_arrow
-      ? PAGE_STYLE.POPPER_PLACEMENT[current_placement]
-      : ''}"
-    class:opacity-0={!popper_class_show}
-  >
+<div
+  {id}
+  bind:this={popper}
+  class="{popper_class} {has_arrow
+    ? PAGE_STYLE.POPPER_PLACEMENT[current_placement]
+    : ''} z-[9999]"
+  class:opacity-0={!popper_class_show}
+  class:hidden={!show_local}
+  on:mouseenter={() => {
+    dispatch("mouseenter");
+  }}
+  on:mouseleave={() => {
+    dispatch("mouseleave");
+  }}
+>
+  {#if popper_show}
     {#if has_arrow}
       <div
         id="arrow"
@@ -66,7 +82,7 @@
     {#if no_container}
       <slot />
     {:else}
-      <div class="relative z-50 {container_class}"><slot /></div>
+      <div class="relative {container_class}"><slot /></div>
     {/if}
-  </div>
-{/if}
+  {/if}
+</div>
