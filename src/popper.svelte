@@ -13,36 +13,51 @@
   export let has_arrow: boolean | undefined = undefined;
   export let no_container: boolean | undefined = undefined;
   export let current_placement: Placement | undefined = undefined;
+  export let insert_into_body: boolean | undefined = undefined;
 
   let popper: HTMLDivElement;
   let popper_arrow: HTMLElement;
+  let show_local: boolean;
 
   export const toggle = (show?: boolean) => {
     popper_show = show ?? !popper_show;
 
     if (popper_show) {
-      setTimeout(() => {
-        createPopper(reference, popper, {
-          placement,
-          strategy: "fixed",
+      if (insert_into_body) {
+        document.body.append(popper);
+        show_local = true;
+      }
+      setTimeout(
+        () => {
+          createPopper(reference, popper, {
+            placement,
+            strategy: "fixed",
 
-          modifiers: [
-            {
-              name: "arrow",
-              options: {
-                element: popper_arrow,
+            modifiers: [
+              {
+                name: "arrow",
+                options: {
+                  element: popper_arrow,
+                },
+                fn({ state }: ModifierArguments<any>) {
+                  current_placement = state.placement;
+                },
               },
-              fn({ state }: ModifierArguments<any>) {
-                current_placement = state.placement;
-              },
-            },
-          ],
-        });
-        setTimeout(() => {
-          popper_class_show = 1;
-        }, 0);
-      }, 0);
-    } else popper_class_show = undefined;
+            ],
+          });
+          setTimeout(() => {
+            popper_class_show = 1;
+          }, 0);
+        },
+        insert_into_body ? 100 : 0
+      );
+    } else {
+      if (insert_into_body) {
+        document.body.removeChild(popper);
+        show_local = false;
+      }
+      popper_class_show = undefined;
+    }
   };
 </script>
 
@@ -52,7 +67,7 @@
     bind:this={popper}
     class="{popper_class} {has_arrow
       ? PAGE_STYLE.POPPER_PLACEMENT[current_placement]
-      : ''}"
+      : ''} {insert_into_body && !show_local ? 'hidden' : ''}"
     class:opacity-0={!popper_class_show}
   >
     {#if has_arrow}
