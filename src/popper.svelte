@@ -14,6 +14,7 @@
   export let no_container: boolean | undefined = undefined;
   export let current_placement: Placement | undefined = undefined;
   export let insert_into_body: boolean | undefined = undefined;
+  export let fixed: boolean | undefined = undefined;
 
   let popper: HTMLDivElement;
   let popper_arrow: HTMLElement;
@@ -31,7 +32,7 @@
         () => {
           createPopper(reference, popper, {
             placement,
-            strategy: "fixed",
+            ...(fixed ? { strategy: "fixed" } : {}),
 
             modifiers: [
               {
@@ -67,7 +68,7 @@
     bind:this={popper}
     class="{popper_class} {has_arrow
       ? PAGE_STYLE.POPPER_PLACEMENT[current_placement]
-      : ''} {insert_into_body && !show_local ? 'hidden' : ''}"
+      : ''} {insert_into_body && !show_local ? 'hidden' : ''} z-[99999]"
     class:opacity-0={!popper_class_show}
   >
     {#if has_arrow}
