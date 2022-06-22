@@ -60,7 +60,7 @@
   <div
     {id}
     bind:this={popper}
-    class="{popper_class} {has_arrow
+    class="fixed {popper_class} {has_arrow
       ? PAGE_STYLE.POPPER_PLACEMENT[current_placement]
       : ''} !z-[99999]"
     class:opacity-0={!popper_class_show}
