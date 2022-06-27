@@ -71,7 +71,7 @@
       dispatch("mouseleave");
     }}
   >
-    <PopperInner {...$$restProps}>
+    <PopperInner {...$$props}>
       <slot />
     </PopperInner>
   </div>
