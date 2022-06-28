@@ -4,17 +4,18 @@
   import { PAGE_STYLE } from "./constants/page-style.constant.svelte";
   import PopperInner from "popper-svelte/src/popper-inner.svelte";
   import { createEventDispatcher } from "svelte";
+  import type { TransitionConfig } from "svelte/transition";
 
   export let reference: HTMLElement;
   export let id: string | undefined = undefined;
-  export let container_class: svelte.JSX.ClassName = "";
   export let popper_show: boolean | undefined = undefined;
   export let popper_class_show: 1 | undefined = undefined;
   export let placement: Placement;
   export let has_arrow: boolean | undefined = undefined;
-  export let no_container: boolean | undefined = undefined;
   export let current_placement: Placement | undefined = undefined;
   export let fixed: boolean | undefined = undefined;
+  export let transition: (...args: any[]) => TransitionConfig | undefined =
+    undefined;
 
   let popper_class: svelte.JSX.ClassName = "";
   export { popper_class as class };
@@ -59,10 +60,7 @@
 {#if popper_show}
   <div
     {id}
-    bind:this={popper}
-    class="fixed {popper_class} {has_arrow
-      ? PAGE_STYLE.POPPER_PLACEMENT[current_placement]
-      : ''} !z-[99999]"
+    class="fixed !z-[99999]"
     class:opacity-0={!popper_class_show}
     on:mouseenter={() => {
       dispatch("mouseenter");
@@ -70,9 +68,17 @@
     on:mouseleave={() => {
       dispatch("mouseleave");
     }}
+    bind:this={popper}
   >
-    <PopperInner {...$$props}>
-      <slot />
-    </PopperInner>
+    <div
+      class="{popper_class} {has_arrow
+        ? PAGE_STYLE.POPPER_PLACEMENT[current_placement]
+        : ''}"
+      transition:transition
+    >
+      <PopperInner {...$$props}>
+        <slot />
+      </PopperInner>
+    </div>
   </div>
 {/if}
