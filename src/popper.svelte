@@ -16,13 +16,13 @@
   export let fixed: boolean | undefined = undefined;
   export let transition: (...args: any[]) => TransitionConfig | undefined =
     undefined;
+  export let wrapper_class: svelte.JSX.ClassName = "";
 
   let popper_class: svelte.JSX.ClassName = "";
   export { popper_class as class };
 
   let popper: HTMLDivElement;
   let popper_arrow: HTMLElement;
-  let show_local: boolean;
 
   const dispatch = createEventDispatcher();
 
@@ -60,7 +60,7 @@
 {#if popper_show}
   <div
     {id}
-    class="fixed !z-[99999]"
+    class="fixed !z-[99999] {wrapper_class}"
     class:opacity-0={!popper_class_show}
     on:mouseenter={() => {
       dispatch("mouseenter");
