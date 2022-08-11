@@ -26,12 +26,15 @@
 
   const dispatch = createEventDispatcher();
 
-  export const toggle = (show?: boolean) => {
+  export const toggle = (
+    show?: boolean,
+    current_reference: HTMLElement = reference
+  ) => {
     popper_show = show ?? !popper_show;
 
     if (popper_show) {
       setTimeout(() => {
-        createPopper(reference, popper, {
+        createPopper(current_reference, popper, {
           placement,
           ...(fixed ? { strategy: "fixed" } : {}),
 
